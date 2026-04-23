@@ -38,7 +38,7 @@ class ProfileService:
     @staticmethod
     def update_profile(db: Session, profile_id: UUID, profile: ProfileUpdate) -> Profile | None:
 
-        existing_profile = db.query(Profile).filter(Profile.id == profile_id).first()
+        existing_profile = ProfileService.get_profile_by_id(db, profile_id)
 
         if not existing_profile:
             return None
