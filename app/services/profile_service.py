@@ -97,7 +97,7 @@ class ProfileQueryBuilder:
         if min_country_p:
             self.query = self.query.filter(Profile.country_probability == min_country_p)
         
-    def filter_gender_probability(self, min_gender_p: float)
+    def filter_gender_probability(self, min_gender_p: float):
         if min_gender_p:
             self.query = self.query.filter(Profile.country_probability == min_gender_p)
 
