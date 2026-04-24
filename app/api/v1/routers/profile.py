@@ -37,3 +37,11 @@ def read_all_profiles(
             profile.to_dict() for profile in (data or [])
         ]
     }
+
+
+@router.get("/seed")
+def seed():
+    import app.db.seeds.seeder as seeder
+
+    seeder.seed_profiles()
+    
