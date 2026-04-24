@@ -54,7 +54,7 @@ class FilterParams(BaseModel):
 
 class SortParams(BaseModel):
     sort_by: SortEnum | None = None
-    order_by: OrderByEnum = OrderByEnum.ASCENDING
+    order: OrderByEnum = OrderByEnum.ASCENDING
 
 class PaginationParams:
     def __init__(self, page: int = 1, limit: int = 10):

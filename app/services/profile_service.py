@@ -144,7 +144,7 @@ class ProfileQueryBuilder:
                 self.sort_column = Profile.gender_probability
 
         if self.sort_column:
-            if sort_params.order_by == "asc":
+            if sort_params.order == "asc":
                 self.query = self.query.order_by(asc(self.sort_column))
             else:
                 self.query = self.query.order_by(desc(self.sort_column))
