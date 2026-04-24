@@ -5,7 +5,8 @@ from fastapi import FastAPI
 from app.api.v1.routers import api_router
 from app.core.settings import settings
 from app.core.exception_handlers import add_exception_handlers
-from app.db.database import init_db, Base, engine
+from app.db.database import init_db, Base
+import app.db.database as db_module
 from app.models.profile import Profile
 
 
@@ -13,7 +14,7 @@ from app.models.profile import Profile
 async def lifespan(app: FastAPI):
     if not settings.TESTING:
         init_db()
-        Base.metadata.create_all(bind=engine)
+        Base.metadata.create_all(bind=db_module.engine)
 
     yield
 
