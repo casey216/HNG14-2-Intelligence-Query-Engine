@@ -39,10 +39,10 @@ class ProfileService:
     
     @staticmethod
     def get_all_profiles(
+        db: Session,
         filter_params: FilterParams,
-        sort_params: SortParams,
         p: PaginationParams,
-        db: Session
+        sort_params: SortParams | None = None
         ) -> dict[str, Any]:
         q = db.query(Profile)
         q = ProfileQueryBuilder(q)
@@ -133,7 +133,9 @@ class ProfileQueryBuilder:
             self.query = self.query.filter(Profile.gender_probability >= min_gender_p)
         return self
     
-    def sort_by(self, sort_params: SortParams):
+    def sort_by(self, sort_params: SortParams | None):
+        if not sort_params:
+            return self
         if sort_params.sort_by:
             value = sort_params.sort_by.value
             if value == "age":
