@@ -42,7 +42,7 @@ def read_all_profiles(
 
 @router.get("/search")
 def nlq_search(
-    q: Annotated[str, Query(default=None)],
+    q: Annotated[str, Query()],
     p: Annotated[PaginationParams, Depends()],
     db: Annotated[Session, Depends(get_db)]
 ):
