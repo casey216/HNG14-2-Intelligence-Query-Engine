@@ -142,8 +142,10 @@ def parse_natural_language_query(q: str) -> Optional[FilterParams]:
             break
 
     # Check if both genders mentioned (e.g., "male and female")
-    has_male = any(re.search(r'\b' + kw + r'\b', q_lower) for kw in GENDER_KEYWORDS["male"])
-    has_female = any(re.search(r'\b' + kw + r'\b', q_lower) for kw in GENDER_KEYWORDS["female"])
+    has_male = any(re.search(r'\b' + kw + r'\b', q_lower)
+                   for kw in GENDER_KEYWORDS["male"])
+    has_female = any(re.search(r'\b' + kw + r'\b', q_lower)
+                     for kw in GENDER_KEYWORDS["female"])
     if has_male and has_female:
         # Both genders — don't filter by gender
         filters.gender = None
@@ -163,13 +165,17 @@ def parse_natural_language_query(q: str) -> Optional[FilterParams]:
 
     # --- Explicit age mentions: "above X", "over X", "below X", "under X", "between X and Y" ---
     # "above X" / "over X" → min_age = X
-    above_match = re.search(r'\b(?:above|over|older than|greater than)\s+(\d+)\b', q_lower)
+    above_match = re.search(
+        r'\b(?:above|over|older than|greater than)\s+(\d+)\b',
+        q_lower)
     if above_match:
         filters.min_age = int(above_match.group(1))
         matched_something = True
 
     # "below X" / "under X" → max_age = X
-    below_match = re.search(r'\b(?:below|under|younger than|less than)\s+(\d+)\b', q_lower)
+    below_match = re.search(
+        r'\b(?:below|under|younger than|less than)\s+(\d+)\b',
+        q_lower)
     if below_match:
         filters.max_age = int(below_match.group(1))
         matched_something = True
@@ -200,7 +206,9 @@ def parse_natural_language_query(q: str) -> Optional[FilterParams]:
 
     # --- "from X" pattern as fallback (extract word after "from") ---
     if not filters.country_id:
-        from_match = re.search(r'\bfrom\s+([a-z\s]+?)(?:\s+(?:aged?|above|over|below|under|between|who|that|with|$)|\s*$)', q_lower)
+        from_match = re.search(
+            r'\bfrom\s+([a-z\s]+?)(?:\s+(?:aged?|above|over|below|under|between|who|that|with|$)|\s*$)',
+            q_lower)
         if from_match:
             possible_country = from_match.group(1).strip()
             # Try to match it

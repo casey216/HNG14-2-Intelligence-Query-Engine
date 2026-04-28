@@ -38,6 +38,6 @@ reload = False
 if settings.ENV == "development":
     reload = True
 
-if __name__=="__main__":
+if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app="app.server:app", reload=reload)

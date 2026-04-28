@@ -14,14 +14,15 @@ class BaseModel(Base, ModelMixin):
     Project base class — all models inherit __repr__ and to_dict()
     automatically just by extending Base.
     """
-    
+
     __abstract__ = True
 
 
 class Profile(BaseModel):
     __tablename__ = "profiles"
 
-    id: Mapped[uuid.UUID] = mapped_column(UUID, primary_key=True, default=uuid7)
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID, primary_key=True, default=uuid7)
     name: Mapped[str] = mapped_column(String(100), unique=True)
     gender: Mapped[str] = mapped_column(String(100), index=True)
     gender_probability: Mapped[float] = mapped_column(Float)
@@ -30,4 +31,5 @@ class Profile(BaseModel):
     country_id: Mapped[str] = mapped_column(String(2), index=True)
     country_name: Mapped[str] = mapped_column(String(100))
     country_probability: Mapped[float] = mapped_column(Float)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), index=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), index=True)

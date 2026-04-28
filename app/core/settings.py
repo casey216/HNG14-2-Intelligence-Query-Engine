@@ -6,10 +6,12 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parent
 
+
 def _get_env_file() -> str:
     if os.environ.get("TESTING") == "1":
         return "tests/.env.test"
     return ".env"
+
 
 class Settings(BaseSettings):
     """Class to hold application's config values"""

@@ -1,13 +1,11 @@
+from app.db.database import init_db, get_db, Base
+import app.db.database as db_module
+from app.server import app
+from sqlalchemy.orm import Session
+from fastapi.testclient import TestClient
+import pytest
 import os
 os.environ["TESTING"] = "1"
-
-import pytest
-from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session
-
-from app.server import app
-import app.db.database as db_module
-from app.db.database import init_db, get_db, Base
 
 
 @pytest.fixture(scope="session", autouse=True)

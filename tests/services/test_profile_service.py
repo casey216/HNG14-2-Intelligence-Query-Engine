@@ -10,15 +10,17 @@ from app.services.profile_service import ProfileService
 
 def create_sample_profile(n: int = 0) -> ProfileCreate:
     return ProfileCreate(
-            name=f"kenechi {n}",
-            gender=Gender.MALE,
-            gender_probability=0.99,
-            age=33,
-            age_group=AgeGroup.ADULT,
-            country_id="NG",
-            country_name="nigeria",
-            country_probability=0.99
-        )
+        name=f"kenechi {n}",
+        gender=Gender.MALE,
+        gender_probability=0.99,
+        age=33,
+        age_group=AgeGroup.ADULT,
+        country_id="NG",
+        country_name="nigeria",
+        country_probability=0.99
+    )
+
+
 class TestProfileService:
     """Test class for profile service."""
 
@@ -77,7 +79,8 @@ class TestProfileService:
         assert profile is None
 
     def test_update_profile(self, db_session):
-        created = ProfileService.create_profile(db_session, create_sample_profile())
+        created = ProfileService.create_profile(
+            db_session, create_sample_profile())
 
         update_data = ProfileUpdate(
             name="updated name",
@@ -85,7 +88,8 @@ class TestProfileService:
             gender_probability=0.88
         )
 
-        updated = ProfileService.update_profile(db_session, created.id, update_data)
+        updated = ProfileService.update_profile(
+            db_session, created.id, update_data)
 
         assert updated is not None
         assert updated.name == "updated name"
@@ -93,11 +97,13 @@ class TestProfileService:
         assert updated.gender_probability == 0.88
 
     def test_update_with_unset_values_changes_nothing(self, db_session):
-        created = ProfileService.create_profile(db_session, create_sample_profile())
+        created = ProfileService.create_profile(
+            db_session, create_sample_profile())
 
         update_data = ProfileUpdate()
 
-        updated = ProfileService.update_profile(db_session, created.id, update_data)
+        updated = ProfileService.update_profile(
+            db_session, created.id, update_data)
 
         assert updated is not None
         assert updated.name == created.name
