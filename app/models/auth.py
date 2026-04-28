@@ -1,11 +1,11 @@
 import uuid
 from datetime import datetime, timedelta, timezone
-from uuid_extensions import uuid7
 
 from sqlalchemy import UUID, String, Boolean, DateTime, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .base import BaseModel
+from .user import User
 
 
 class RefreshToken(BaseModel):
@@ -18,3 +18,5 @@ class RefreshToken(BaseModel):
         default=lambda: datetime.now(timezone.utc) + timedelta(minutes=5)
     )
     used: Mapped[bool] = mapped_column(Boolean)
+
+    user: Mapped["User"] = relationship("User", back_populates="tokens")
