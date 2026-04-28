@@ -7,6 +7,7 @@ class RoleEnum(StrEnum):
     ADMIN = "admin"
     ANALYST = "analyst"
 
+
 class UserCreate(BaseModel):
     github_id: str
     username: str
@@ -35,3 +36,4 @@ class UserUpdate(BaseModel):
     avatar_url: str
     role: RoleEnum
     is_active: bool
+    
