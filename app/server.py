@@ -16,8 +16,9 @@ from app.models.profile import Profile
 async def lifespan(app: FastAPI):
     if not settings.TESTING:
         init_db()
-        Base.metadata.create_all(bind=db_module.engine)
-        seeder.seed_profiles()
+        if settings.ENV == "production":
+            Base.metadata.create_all(bind=db_module.engine)
+            seeder.seed_profiles()
 
     yield
 
