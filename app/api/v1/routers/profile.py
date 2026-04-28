@@ -5,8 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.core.nlp_parser import parse_natural_language_query
 from app.db.database import get_db
-from app.models.profile import Profile
-from app.schemas.profile import FilterParams, SortParams, PaginationParams, AllProfiles, Gender
+from app.schemas.profile import FilterParams, SortParams, PaginationParams, AllProfiles
 from app.services.profile_service import ProfileService
 
 
@@ -38,7 +37,7 @@ def read_all_profiles(
             profile.to_dict() for profile in (data or [])
         ]
     }
-#test
+
 
 @router.get("/search")
 def nlq_search(
@@ -47,7 +46,8 @@ def nlq_search(
     db: Annotated[Session, Depends(get_db)]
 ):
     if not q or not q.strip():
-        raise HTTPException(status_code=400, detail="Missing or empty query parameter")
+        raise HTTPException(status_code=400,
+                            detail="Missing or empty query parameter")
 
     filters = parse_natural_language_query(q)
     if filters is None:
@@ -55,7 +55,7 @@ def nlq_search(
             status_code=422,
             detail="Unable to interpret query"
         )
-    
+
     result = ProfileService.get_all_profiles(
         db,
         filters,
@@ -73,4 +73,3 @@ def nlq_search(
             profile.to_dict() for profile in (data or [])
         ]
     }
-    

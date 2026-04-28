@@ -9,7 +9,7 @@ from app.core.exception_handlers import add_exception_handlers
 from app.db.database import init_db, Base
 import app.db.database as db_module
 import app.db.seeds.seeder as seeder
-from app.models.profile import Profile
+from app.models.profile import Profile  # noqa: F401
 
 
 @asynccontextmanager
@@ -38,6 +38,6 @@ reload = False
 if settings.ENV == "development":
     reload = True
 
-if __name__=="__main__":
+if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app="app.server:app", reload=reload)

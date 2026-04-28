@@ -7,7 +7,7 @@ from sqlalchemy.exc import IntegrityError
 
 from app.models.profile import Profile
 from app.schemas.profile import (
-    ProfileCreate, ProfileUpdate, 
+    ProfileCreate, ProfileUpdate,
     Gender, AgeGroup, SortParams,
     FilterParams, PaginationParams
 )
@@ -32,18 +32,18 @@ class ProfileService:
     @staticmethod
     def get_profile_by_id(db: Session, profile_id: UUID) -> Profile | None:
         return db.query(Profile).filter(Profile.id == profile_id).first()
-    
+
     @staticmethod
     def get_profile_by_name(db: Session, name: str) -> Profile | None:
         return db.query(Profile).filter(Profile.name == name).first()
-    
+
     @staticmethod
     def get_all_profiles(
         db: Session,
         filter_params: FilterParams,
         p: PaginationParams,
         sort_params: SortParams | None = None
-        ) -> dict[str, Any]:
+    ) -> dict[str, Any]:
         q = db.query(Profile)
         q = ProfileQueryBuilder(q)
         q = q.filter_age(filter_params.min_age, filter_params.max_age)
@@ -62,16 +62,16 @@ class ProfileService:
             "total": total,
             "data": profiles
         }
-        
-    
+
     @staticmethod
-    def update_profile(db: Session, profile_id: UUID, profile: ProfileUpdate) -> Profile | None:
+    def update_profile(db: Session, profile_id: UUID,
+                       profile: ProfileUpdate) -> Profile | None:
 
         existing_profile = ProfileService.get_profile_by_id(db, profile_id)
 
         if not existing_profile:
             return None
-        
+
         new_profile = profile.model_dump(exclude_unset=True)
 
         for key, value in new_profile.items():
@@ -81,7 +81,7 @@ class ProfileService:
         db.refresh(existing_profile)
 
         return existing_profile
-    
+
     @staticmethod
     def delete_profile(db: Session, profile_id: UUID) -> bool:
         profile = db.query(Profile).filter(Profile.id == profile_id).first()
@@ -93,10 +93,11 @@ class ProfileService:
         db.commit()
 
         return True
-    
+
 
 class ProfileQueryBuilder:
     """Query buider for Profile service"""
+
     def __init__(self, query: Query[Profile]):
         self.query = query
         self.sort_column = None
@@ -112,7 +113,7 @@ class ProfileQueryBuilder:
         if max_age:
             self.query = self.query.filter(Profile.age <= max_age)
         return self
-    
+
     def filter_age_group(self, age_group: AgeGroup | None):
         if age_group:
             self.query = self.query.filter(Profile.age_group == age_group)
@@ -120,19 +121,22 @@ class ProfileQueryBuilder:
 
     def filter_country_id(self, country_id: str | None):
         if country_id:
-            self.query = self.query.filter(Profile.country_id == country_id.upper())
+            self.query = self.query.filter(
+                Profile.country_id == country_id.upper())
         return self
 
     def filter_country_probability(self, min_country_p: float | None):
         if min_country_p:
-            self.query = self.query.filter(Profile.country_probability >= min_country_p)
+            self.query = self.query.filter(
+                Profile.country_probability >= min_country_p)
         return self
-    
+
     def filter_gender_probability(self, min_gender_p: float | None):
         if min_gender_p:
-            self.query = self.query.filter(Profile.gender_probability >= min_gender_p)
+            self.query = self.query.filter(
+                Profile.gender_probability >= min_gender_p)
         return self
-    
+
     def sort_by(self, sort_params: SortParams | None):
         if not sort_params:
             return self
